@@ -20,7 +20,7 @@ interface GalaxyCanvasProps {
 export function GalaxyCanvas({ width, height, starCount = 800 }: GalaxyCanvasProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const starsRef = useRef<Star[]>([]);
-    const animationRef = useRef<number>();
+    const animationRef = useRef<number | undefined>(undefined);
 
     // Generate stars in elliptical distribution
     const generateStars = useCallback(() => {
