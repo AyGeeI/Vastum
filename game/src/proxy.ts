@@ -5,7 +5,7 @@ import type { NextRequest } from "next/server";
 const protectedRoutes = ["/dashboard", "/planet", "/map", "/fleet", "/alliance", "/market", "/settings"];
 const publicRoutes = ["/", "/login"];
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
     // Allow public routes and static assets
