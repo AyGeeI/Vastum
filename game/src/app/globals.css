@@ -11,9 +11,12 @@
   --star-dust: #C5C6C7;
   --neon-cyan: #45A29E;
   --neon-cyan-bright: #66FCF1;
-  --alert-red: #C3073F;
+  --alert-red: #FF6B6B;
+  /* Brighter coral red for better contrast */
   --victory-gold: #FFD700;
-  
+  --secondary: #9B59B6;
+  /* Purple for energy */
+
   /* Semantic Colors */
   --background: var(--void-black);
   --background-elevated: var(--deep-space);
@@ -23,13 +26,13 @@
   --primary-bright: var(--neon-cyan-bright);
   --danger: var(--alert-red);
   --accent: var(--victory-gold);
-  
+
   /* Borders & Shadows */
   --border: rgba(69, 162, 158, 0.3);
   --border-bright: rgba(102, 252, 241, 0.5);
   --glow-cyan: 0 0 20px rgba(102, 252, 241, 0.3);
   --glow-red: 0 0 20px rgba(195, 7, 63, 0.5);
-  
+
   /* Glass Effect */
   --glass-bg: rgba(31, 40, 51, 0.7);
   --glass-border: rgba(102, 252, 241, 0.2);
@@ -42,11 +45,12 @@
   --color-foreground-muted: var(--foreground-muted);
   --color-primary: var(--primary);
   --color-primary-bright: var(--primary-bright);
+  --color-secondary: var(--secondary);
   --color-danger: var(--danger);
   --color-accent: var(--accent);
   --color-border: var(--border);
   --color-border-bright: var(--border-bright);
-  
+
   --font-sans: var(--font-inter);
   --font-display: var(--font-orbitron);
 }
@@ -98,13 +102,13 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: 
-    radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.3), transparent),
-    radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.2), transparent),
-    radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.4), transparent),
-    radial-gradient(2px 2px at 160px 120px, rgba(255,255,255,0.2), transparent),
-    radial-gradient(1px 1px at 230px 80px, rgba(255,255,255,0.3), transparent),
-    radial-gradient(2px 2px at 300px 150px, rgba(255,255,255,0.15), transparent);
+  background-image:
+    radial-gradient(2px 2px at 20px 30px, rgba(255, 255, 255, 0.3), transparent),
+    radial-gradient(2px 2px at 40px 70px, rgba(255, 255, 255, 0.2), transparent),
+    radial-gradient(1px 1px at 90px 40px, rgba(255, 255, 255, 0.4), transparent),
+    radial-gradient(2px 2px at 160px 120px, rgba(255, 255, 255, 0.2), transparent),
+    radial-gradient(1px 1px at 230px 80px, rgba(255, 255, 255, 0.3), transparent),
+    radial-gradient(2px 2px at 300px 150px, rgba(255, 255, 255, 0.15), transparent);
   background-repeat: repeat;
   background-size: 350px 200px;
   pointer-events: none;
@@ -116,7 +120,12 @@ body::before {
    Typography
    ======================================== */
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-display), var(--font-sans), sans-serif;
   font-weight: 600;
   letter-spacing: 0.05em;
@@ -154,9 +163,12 @@ h1, h2, h3, h4, h5, h6 {
    ======================================== */
 
 @keyframes pulse-glow {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow: 0 0 10px rgba(102, 252, 241, 0.3);
   }
+
   50% {
     box-shadow: 0 0 25px rgba(102, 252, 241, 0.6);
   }
@@ -166,6 +178,7 @@ h1, h2, h3, h4, h5, h6 {
   0% {
     transform: translateY(-100%);
   }
+
   100% {
     transform: translateY(100%);
   }
@@ -179,7 +192,9 @@ h1, h2, h3, h4, h5, h6 {
    Form Elements
    ======================================== */
 
-input, textarea, select {
+input,
+textarea,
+select {
   background: var(--deep-space);
   border: 1px solid var(--border);
   color: var(--foreground);
@@ -188,12 +203,15 @@ input, textarea, select {
   transition: all 0.2s ease;
 }
 
-input:focus, textarea:focus, select:focus {
+input:focus,
+textarea:focus,
+select:focus {
   outline: none;
   border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(69, 162, 158, 0.2);
 }
 
-input::placeholder, textarea::placeholder {
+input::placeholder,
+textarea::placeholder {
   color: var(--foreground-muted);
 }
