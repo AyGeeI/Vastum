@@ -5,5 +5,7 @@ export { PlanetView } from "./planet-view";
 export { ResourceBar } from "./resource-bar";
 export { BuildingList } from "./building-list";
 export { GalaxyMap } from "./galaxy-map";
+export { GalaxyCanvas } from "./galaxy-canvas";
 export { SystemView } from "./system-view";
+
 
