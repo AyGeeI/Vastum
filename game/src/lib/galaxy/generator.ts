@@ -137,8 +137,8 @@ export function generateSectors(config: Partial<GalaxyConfig> = {}): Sector[] {
                 size: 6,
                 type: 'core',
                 totalPlanets: Math.floor(Math.random() * 15) + 10,
-                colonizedPlanets: Math.floor(Math.random() * 8),
-                myPlanets: Math.random() < 0.1 ? 1 : 0,  // 10% chance of having own planet
+                colonizedPlanets: 0,  // All uncolonized by default
+                myPlanets: 0,
             });
         }
     }
@@ -165,8 +165,8 @@ export function generateSectors(config: Partial<GalaxyConfig> = {}): Sector[] {
                 size: 4 + Math.random() * 2,
                 type: 'arm',
                 totalPlanets: Math.floor(Math.random() * 12) + 5,
-                colonizedPlanets: Math.floor(Math.random() * 4),
-                myPlanets: Math.random() < 0.05 ? 1 : 0,  // 5% chance
+                colonizedPlanets: 0,  // All uncolonized
+                myPlanets: 0,
             });
         }
     }
@@ -192,7 +192,7 @@ export function generateSectors(config: Partial<GalaxyConfig> = {}): Sector[] {
                 size: 3,
                 type: 'outer',
                 totalPlanets: Math.floor(Math.random() * 6) + 2,
-                colonizedPlanets: Math.floor(Math.random() * 2),
+                colonizedPlanets: 0,  // All uncolonized
                 myPlanets: 0,
             });
         }
