@@ -19,16 +19,18 @@ export default async function GameLayout({
     let planets: { id: string; name: string }[] = [];
     let currentPlanetId: string | null = null;
 
-    const user = await findUserByGoogleId(session.user.id);
-    if (user) {
-        const userPlanets = await getUserPlanets(user.id);
-        planets = userPlanets.map(p => ({ id: p.id, name: p.name }));
+    if (session.user.id) {
+        const user = await findUserByGoogleId(session.user.id);
+        if (user) {
+            const userPlanets = await getUserPlanets(user.id);
+            planets = userPlanets.map(p => ({ id: p.id, name: p.name }));
 
-        if (userPlanets.length > 0) {
-            currentPlanetId = userPlanets[0].id;
-            const planetData = await getPlanetWithResources(userPlanets[0].id);
-            if (planetData) {
-                resources = planetData.resources;
+            if (userPlanets.length > 0) {
+                currentPlanetId = userPlanets[0].id;
+                const planetData = await getPlanetWithResources(userPlanets[0].id);
+                if (planetData) {
+                    resources = planetData.resources;
+                }
             }
         }
     }
