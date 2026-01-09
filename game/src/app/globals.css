@@ -1,0 +1,199 @@
+@import "tailwindcss";
+
+/* ========================================
+   VASTUM - Sci-Fi Dark Theme
+   ======================================== */
+
+:root {
+  /* Core Colors from Brand Guidelines */
+  --void-black: #0B0C10;
+  --deep-space: #1F2833;
+  --star-dust: #C5C6C7;
+  --neon-cyan: #45A29E;
+  --neon-cyan-bright: #66FCF1;
+  --alert-red: #C3073F;
+  --victory-gold: #FFD700;
+  
+  /* Semantic Colors */
+  --background: var(--void-black);
+  --background-elevated: var(--deep-space);
+  --foreground: var(--star-dust);
+  --foreground-muted: #8B8C8D;
+  --primary: var(--neon-cyan);
+  --primary-bright: var(--neon-cyan-bright);
+  --danger: var(--alert-red);
+  --accent: var(--victory-gold);
+  
+  /* Borders & Shadows */
+  --border: rgba(69, 162, 158, 0.3);
+  --border-bright: rgba(102, 252, 241, 0.5);
+  --glow-cyan: 0 0 20px rgba(102, 252, 241, 0.3);
+  --glow-red: 0 0 20px rgba(195, 7, 63, 0.5);
+  
+  /* Glass Effect */
+  --glass-bg: rgba(31, 40, 51, 0.7);
+  --glass-border: rgba(102, 252, 241, 0.2);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-background-elevated: var(--background-elevated);
+  --color-foreground: var(--foreground);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-primary: var(--primary);
+  --color-primary-bright: var(--primary-bright);
+  --color-danger: var(--danger);
+  --color-accent: var(--accent);
+  --color-border: var(--border);
+  --color-border-bright: var(--border-bright);
+  
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-orbitron);
+}
+
+/* ========================================
+   Base Styles
+   ======================================== */
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--neon-cyan) var(--deep-space);
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--deep-space);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--neon-cyan);
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--neon-cyan-bright);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Add subtle star background */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.3), transparent),
+    radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.2), transparent),
+    radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.4), transparent),
+    radial-gradient(2px 2px at 160px 120px, rgba(255,255,255,0.2), transparent),
+    radial-gradient(1px 1px at 230px 80px, rgba(255,255,255,0.3), transparent),
+    radial-gradient(2px 2px at 300px 150px, rgba(255,255,255,0.15), transparent);
+  background-repeat: repeat;
+  background-size: 350px 200px;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.5;
+}
+
+/* ========================================
+   Typography
+   ======================================== */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display), var(--font-sans), sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ========================================
+   Utility Classes
+   ======================================== */
+
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+}
+
+.glow-cyan {
+  box-shadow: var(--glow-cyan);
+}
+
+.glow-red {
+  box-shadow: var(--glow-red);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, var(--neon-cyan) 0%, var(--neon-cyan-bright) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ========================================
+   Animations
+   ======================================== */
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(102, 252, 241, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(102, 252, 241, 0.6);
+  }
+}
+
+@keyframes scan-line {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* ========================================
+   Form Elements
+   ======================================== */
+
+input, textarea, select {
+  background: var(--deep-space);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(69, 162, 158, 0.2);
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--foreground-muted);
+}
