@@ -1,21 +1,26 @@
 "use client";
 
 import { useState } from "react";
-import { GalaxyMap } from "@/components/game/galaxy-map";
+import { ProceduralGalaxy } from "@/components/game/procedural-galaxy";
 import { SystemView } from "@/components/game/system-view";
+import type { Sector } from "@/lib/galaxy";
 
 export default function MapPage() {
-    const [selectedSector, setSelectedSector] = useState<number | null>(null);
+    const [selectedSector, setSelectedSector] = useState<Sector | null>(null);
+
+    const handleSelectSector = (sector: Sector) => {
+        setSelectedSector(sector);
+    };
 
     return (
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
             {selectedSector ? (
                 <SystemView
-                    sector={selectedSector}
+                    sector={parseInt(selectedSector.id.split("-")[1] || "1")}
                     onBack={() => setSelectedSector(null)}
                 />
             ) : (
-                <GalaxyMap onSelectSector={setSelectedSector} />
+                <ProceduralGalaxy onSelectSector={handleSelectSector} />
             )}
         </div>
     );
