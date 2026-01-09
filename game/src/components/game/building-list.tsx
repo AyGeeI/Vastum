@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Card, CardContent, Button } from "@/components/ui";
 import { BUILDING_DEFINITIONS, calculateBuildingCost, calculateBuildTime } from "@/lib/game";
 import { formatDuration, formatNumber } from "@/lib/utils";
-import { Building, Hammer, Clock, ArrowUp } from "lucide-react";
+import { Building, Hammer, Clock, ArrowUp, X } from "lucide-react";
 import type { Building as BuildingType, PlanetResources, BuildingType as BuildingTypeEnum } from "@/types";
 
 interface BuildingListProps {
@@ -17,7 +17,9 @@ interface BuildingListProps {
 export function BuildingList({ buildings, planetId, resources }: BuildingListProps) {
     const router = useRouter();
     const [upgrading, setUpgrading] = useState<string | null>(null);
+    const [canceling, setCanceling] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<string | null>(null);
     const [countdowns, setCountdowns] = useState<Record<string, number>>({});
 
     // Get command center level for build time calculation
@@ -175,6 +177,44 @@ export function BuildingList({ buildings, planetId, resources }: BuildingListPro
         }
     };
 
+    const handleCancel = async (buildingType: string) => {
+        setCanceling(buildingType);
+        setError(null);
+        setSuccess(null);
+
+        try {
+            const response = await fetch("/api/building/cancel", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    planetId,
+                    buildingType,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || "Abbrechen fehlgeschlagen");
+            }
+
+            setSuccess(data.message);
+
+            // Remove countdown for this building
+            setCountdowns(prev => {
+                const updated = { ...prev };
+                delete updated[buildingType];
+                return updated;
+            });
+
+            router.refresh();
+        } catch (err) {
+            setError(err instanceof Error ? err.message : "Ein Fehler ist aufgetreten");
+        } finally {
+            setCanceling(null);
+        }
+    };
+
     const canAfford = (type: BuildingTypeEnum, level: number) => {
         const cost = calculateBuildingCost(type, level);
         return (
@@ -219,6 +259,17 @@ export function BuildingList({ buildings, planetId, resources }: BuildingListPro
                                     {formatCountdown(countdown)}
                                 </p>
                             )}
+                            <Button
+                                size="sm"
+                                variant="ghost"
+                                className="mt-3 text-danger hover:text-danger hover:bg-danger/20"
+                                onClick={() => handleCancel(building.type)}
+                                loading={canceling === building.type}
+                                disabled={canceling !== null}
+                            >
+                                <X className="w-4 h-4 mr-1" />
+                                Abbrechen (50% Erstattung)
+                            </Button>
                         </div>
                     </div>
                 )}
@@ -309,6 +360,12 @@ export function BuildingList({ buildings, planetId, resources }: BuildingListPro
             {error && (
                 <div className="p-4 bg-danger/20 border border-danger/50 rounded-lg text-sm text-danger">
                     {error}
+                </div>
+            )}
+
+            {success && (
+                <div className="p-4 bg-green-500/20 border border-green-500/50 rounded-lg text-sm text-green-400">
+                    ✅ {success}
                 </div>
             )}
 
