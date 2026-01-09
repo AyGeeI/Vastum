@@ -1,14 +1,48 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui";
 import type { PlanetResources } from "@/types";
 import { formatNumber } from "@/lib/utils";
 
 interface ResourceBarProps {
     resources: PlanetResources;
+    planetId: string;
 }
 
-export function ResourceBar({ resources }: ResourceBarProps) {
+export function ResourceBar({ resources: initialResources, planetId }: ResourceBarProps) {
+    const [resources, setResources] = useState<PlanetResources>(initialResources);
+
     const energyBalance = resources.energy_production - resources.energy_consumption;
     const isEnergyPositive = energyBalance >= 0;
+
+    // Fetch fresh resources every 2 seconds
+    useEffect(() => {
+        const fetchResources = async () => {
+            try {
+                const response = await fetch(`/api/planet/resources?planetId=${planetId}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.resources) {
+                        setResources(data.resources);
+                    }
+                }
+            } catch (err) {
+                console.error("Error fetching resources:", err);
+            }
+        };
+
+        // Update immediately
+        fetchResources();
+
+        const interval = setInterval(fetchResources, 2000);
+        return () => clearInterval(interval);
+    }, [planetId]);
+
+    // Update from props when they change (e.g., after upgrade)
+    useEffect(() => {
+        setResources(initialResources);
+    }, [initialResources]);
 
     return (
         <Card variant="bordered">

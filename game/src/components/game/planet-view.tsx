@@ -42,7 +42,7 @@ export function PlanetView({ planet, resources, buildings, allPlanets }: PlanetV
             </div>
 
             {/* Resource Overview */}
-            <ResourceBar resources={resources} />
+            <ResourceBar resources={resources} planetId={planet.id} />
 
             {/* Planet Stats & Buildings Grid */}
             <div className="grid lg:grid-cols-3 gap-6">
