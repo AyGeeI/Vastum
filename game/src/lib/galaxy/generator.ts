@@ -1,6 +1,7 @@
 /**
  * Procedural Galaxy Generator
  * Creates a spiral galaxy with logarithmic arms and Gaussian distribution
+ * OPTIMIZED for performance with spacing and culling
  */
 
 export interface Sector {
@@ -11,7 +12,6 @@ export interface Sector {
     distanceFromCore: number;
     brightness: number;  // 0-1
     size: number;        // Render size
-    color: string;
     type: 'core' | 'arm' | 'outer';
     // Game data
     totalPlanets: number;
@@ -35,16 +35,18 @@ export interface GalaxyConfig {
     coreSize: number;        // Radius of dense core
     galaxyRadius: number;    // Total radius
     rotationFactor: number;  // How much the arms wind
+    minSectorSpacing: number; // Minimum distance between sectors
 }
 
 const DEFAULT_CONFIG: GalaxyConfig = {
-    numSectors: 500,
-    numStars: 3000,
+    numSectors: 150,         // Reduced from 800
+    numStars: 1000,          // Reduced from 4000
     numArms: 4,
-    armSpread: 0.5,
-    coreSize: 100,
-    galaxyRadius: 2000,
-    rotationFactor: 3,
+    armSpread: 0.4,
+    coreSize: 150,
+    galaxyRadius: 1500,
+    rotationFactor: 2.5,
+    minSectorSpacing: 60,    // Minimum pixels between sectors
 };
 
 /**
@@ -65,6 +67,20 @@ function clamp(value: number, min: number, max: number): number {
 }
 
 /**
+ * Check if a point is too close to existing sectors
+ */
+function isTooClose(x: number, y: number, sectors: Sector[], minDistance: number): boolean {
+    for (const sector of sectors) {
+        const dx = sector.x - x;
+        const dy = sector.y - y;
+        if (dx * dx + dy * dy < minDistance * minDistance) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
  * Generate a logarithmic spiral point
  */
 function spiralPoint(
@@ -75,129 +91,136 @@ function spiralPoint(
     rotationFactor: number,
     armSpread: number
 ): { x: number; y: number } {
-    // Base angle for this arm
     const armAngle = (2 * Math.PI * armIndex) / numArms;
-
-    // Logarithmic spiral: r = a * e^(b*theta)
     const theta = angle + armAngle;
     const spiralTwist = rotationFactor * (radius / 1000);
 
-    // Add jitter for natural look
-    const jitterAngle = (Math.random() - 0.5) * armSpread;
-    const jitterRadius = gaussianRandom(0, radius * 0.1);
+    // Reduced jitter for cleaner spacing
+    const jitterAngle = (Math.random() - 0.5) * armSpread * 0.5;
+    const jitterRadius = gaussianRandom(0, radius * 0.05);
 
     const finalRadius = radius + jitterRadius;
     const finalAngle = theta + spiralTwist + jitterAngle;
 
     return {
         x: Math.cos(finalAngle) * finalRadius,
-        y: Math.sin(finalAngle) * finalRadius * 0.6, // Flatten for perspective
+        y: Math.sin(finalAngle) * finalRadius * 0.6,
     };
 }
 
 /**
- * Generate galaxy sectors (interactive objects)
+ * Generate galaxy sectors with proper spacing
  */
 export function generateSectors(config: Partial<GalaxyConfig> = {}): Sector[] {
     const cfg = { ...DEFAULT_CONFIG, ...config };
     const sectors: Sector[] = [];
+    const maxAttempts = cfg.numSectors * 10;
+    let attempts = 0;
 
-    // Core sectors (dense center)
-    const numCoreSectors = Math.floor(cfg.numSectors * 0.2);
-    for (let i = 0; i < numCoreSectors; i++) {
+    // Core sectors (dense center) - fewer sectors
+    const numCoreSectors = Math.floor(cfg.numSectors * 0.15);
+    while (sectors.filter(s => s.type === 'core').length < numCoreSectors && attempts < maxAttempts) {
+        attempts++;
         const angle = Math.random() * Math.PI * 2;
-        const distance = Math.abs(gaussianRandom(0, cfg.coreSize * 0.5));
+        const distance = Math.abs(gaussianRandom(0, cfg.coreSize * 0.4));
+        const x = Math.cos(angle) * distance;
+        const y = Math.sin(angle) * distance * 0.6;
 
-        sectors.push({
-            id: `core-${i}`,
-            x: Math.cos(angle) * distance,
-            y: Math.sin(angle) * distance * 0.6,
-            armIndex: -1,
-            distanceFromCore: distance,
-            brightness: 0.8 + Math.random() * 0.2,
-            size: 8 + Math.random() * 6,
-            color: `hsl(${180 + Math.random() * 40}, 70%, ${60 + Math.random() * 20}%)`,
-            type: 'core',
-            totalPlanets: Math.floor(Math.random() * 20) + 10,
-            colonizedPlanets: Math.floor(Math.random() * 10),
-            myPlanets: 0,
-        });
+        if (!isTooClose(x, y, sectors, cfg.minSectorSpacing * 0.8)) {
+            sectors.push({
+                id: `core-${sectors.length}`,
+                x,
+                y,
+                armIndex: -1,
+                distanceFromCore: distance,
+                brightness: 0.9,
+                size: 6,
+                type: 'core',
+                totalPlanets: Math.floor(Math.random() * 15) + 10,
+                colonizedPlanets: Math.floor(Math.random() * 8),
+                myPlanets: Math.random() < 0.1 ? 1 : 0,  // 10% chance of having own planet
+            });
+        }
     }
 
-    // Arm sectors
+    // Arm sectors - spread along spiral arms
     const numArmSectors = Math.floor(cfg.numSectors * 0.7);
-    for (let i = 0; i < numArmSectors; i++) {
-        const armIndex = i % cfg.numArms;
-        // Use Gaussian distribution for distance (more near core)
-        const distance = Math.abs(gaussianRandom(cfg.galaxyRadius * 0.4, cfg.galaxyRadius * 0.25));
-        const clampedDistance = clamp(distance, cfg.coreSize, cfg.galaxyRadius);
+    attempts = 0;
+    while (sectors.filter(s => s.type === 'arm').length < numArmSectors && attempts < maxAttempts) {
+        attempts++;
+        const armIndex = Math.floor(Math.random() * cfg.numArms);
+        const distance = cfg.coreSize + Math.random() * (cfg.galaxyRadius - cfg.coreSize);
+        const angle = (distance / cfg.galaxyRadius) * Math.PI * 2.5;
+        const point = spiralPoint(angle, armIndex, cfg.numArms, distance, cfg.rotationFactor, cfg.armSpread);
 
-        const angle = (distance / cfg.galaxyRadius) * Math.PI * 2;
-        const point = spiralPoint(angle, armIndex, cfg.numArms, clampedDistance, cfg.rotationFactor, cfg.armSpread);
-
-        const brightness = 1 - (clampedDistance / cfg.galaxyRadius) * 0.5;
-
-        sectors.push({
-            id: `arm-${armIndex}-${i}`,
-            x: point.x,
-            y: point.y,
-            armIndex,
-            distanceFromCore: clampedDistance,
-            brightness: brightness * (0.7 + Math.random() * 0.3),
-            size: 4 + Math.random() * 4,
-            color: `hsl(${170 + armIndex * 20 + Math.random() * 20}, ${50 + Math.random() * 30}%, ${50 + Math.random() * 20}%)`,
-            type: 'arm',
-            totalPlanets: Math.floor(Math.random() * 15) + 5,
-            colonizedPlanets: Math.floor(Math.random() * 5),
-            myPlanets: 0,
-        });
+        if (!isTooClose(point.x, point.y, sectors, cfg.minSectorSpacing)) {
+            const brightness = 1 - (distance / cfg.galaxyRadius) * 0.4;
+            sectors.push({
+                id: `arm-${sectors.length}`,
+                x: point.x,
+                y: point.y,
+                armIndex,
+                distanceFromCore: distance,
+                brightness,
+                size: 4 + Math.random() * 2,
+                type: 'arm',
+                totalPlanets: Math.floor(Math.random() * 12) + 5,
+                colonizedPlanets: Math.floor(Math.random() * 4),
+                myPlanets: Math.random() < 0.05 ? 1 : 0,  // 5% chance
+            });
+        }
     }
 
     // Outer sectors (sparse)
-    const numOuterSectors = cfg.numSectors - numCoreSectors - numArmSectors;
-    for (let i = 0; i < numOuterSectors; i++) {
+    const numOuterSectors = cfg.numSectors - sectors.length;
+    attempts = 0;
+    while (sectors.filter(s => s.type === 'outer').length < numOuterSectors && attempts < maxAttempts) {
+        attempts++;
         const angle = Math.random() * Math.PI * 2;
-        const distance = cfg.galaxyRadius * 0.7 + Math.random() * cfg.galaxyRadius * 0.3;
+        const distance = cfg.galaxyRadius * 0.8 + Math.random() * cfg.galaxyRadius * 0.2;
+        const x = Math.cos(angle) * distance;
+        const y = Math.sin(angle) * distance * 0.6;
 
-        sectors.push({
-            id: `outer-${i}`,
-            x: Math.cos(angle) * distance + (Math.random() - 0.5) * 200,
-            y: Math.sin(angle) * distance * 0.6 + (Math.random() - 0.5) * 100,
-            armIndex: -1,
-            distanceFromCore: distance,
-            brightness: 0.3 + Math.random() * 0.3,
-            size: 2 + Math.random() * 3,
-            color: `hsl(${200 + Math.random() * 40}, 30%, ${40 + Math.random() * 20}%)`,
-            type: 'outer',
-            totalPlanets: Math.floor(Math.random() * 8) + 2,
-            colonizedPlanets: Math.floor(Math.random() * 2),
-            myPlanets: 0,
-        });
+        if (!isTooClose(x, y, sectors, cfg.minSectorSpacing * 1.2)) {
+            sectors.push({
+                id: `outer-${sectors.length}`,
+                x,
+                y,
+                armIndex: -1,
+                distanceFromCore: distance,
+                brightness: 0.4,
+                size: 3,
+                type: 'outer',
+                totalPlanets: Math.floor(Math.random() * 6) + 2,
+                colonizedPlanets: Math.floor(Math.random() * 2),
+                myPlanets: 0,
+            });
+        }
     }
 
+    console.log(`Generated ${sectors.length} sectors`);
     return sectors;
 }
 
 /**
- * Generate background stars (non-interactive)
+ * Generate background stars (non-interactive) - optimized
  */
 export function generateStars(config: Partial<GalaxyConfig> = {}): Star[] {
     const cfg = { ...DEFAULT_CONFIG, ...config };
     const stars: Star[] = [];
 
     for (let i = 0; i < cfg.numStars; i++) {
-        const layer = Math.floor(Math.random() * 3); // 0, 1, or 2
-        const spreadFactor = 1 + layer * 0.3; // Far layers are more spread out
+        const layer = Math.floor(Math.random() * 3);
+        const spreadFactor = 1 + layer * 0.4;
 
-        // More stars near center
         const angle = Math.random() * Math.PI * 2;
-        const distance = Math.abs(gaussianRandom(0, cfg.galaxyRadius * 0.6 * spreadFactor));
+        const distance = Math.abs(gaussianRandom(0, cfg.galaxyRadius * 0.7 * spreadFactor));
 
         stars.push({
             x: Math.cos(angle) * distance,
             y: Math.sin(angle) * distance * 0.6,
-            size: 0.5 + Math.random() * (1.5 - layer * 0.3),
-            brightness: 0.3 + Math.random() * 0.7,
+            size: 0.3 + Math.random() * (1 - layer * 0.2),
+            brightness: 0.2 + Math.random() * 0.5,
             layer,
         });
     }
@@ -271,7 +294,7 @@ export class SpatialHash {
             const dx = sector.x - x;
             const dy = sector.y - y;
             const dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < minDist && dist <= sector.size * 2) {
+            if (dist < minDist && dist <= sector.size * 3) {
                 minDist = dist;
                 nearest = sector;
             }

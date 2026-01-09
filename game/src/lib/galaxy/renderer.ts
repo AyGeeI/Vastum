@@ -1,6 +1,6 @@
 /**
  * Galaxy Renderer
- * Multi-layer Canvas rendering with parallax
+ * Multi-layer Canvas rendering with parallax - OPTIMIZED
  */
 
 import type { Sector, Star } from "./generator";
@@ -20,6 +20,16 @@ const DEFAULT_RENDER_CONFIG: RenderConfig = {
     parallaxStrength: 0.3,
 };
 
+// Color constants matching legend
+const COLORS = {
+    ownPlanet: "#66FCF1",      // Cyan - Eigene Planeten
+    ownPlanetDim: "#45A29E",
+    otherPlayer: "#FF6B6B",    // Red - Andere Spieler  
+    otherPlayerDim: "#CC5555",
+    uncolonized: "#8899AA",    // Gray-blue - Unbesiedelt
+    uncolonizedDim: "#667788",
+};
+
 /**
  * Render nebula background
  */
@@ -29,36 +39,24 @@ export function renderNebula(
     height: number,
     camera: Camera
 ): void {
-    // Subtle gradient that moves with camera
-    const offsetX = camera.state.x * 0.02;
-    const offsetY = camera.state.y * 0.02;
+    const offsetX = camera.state.x * 0.01;
+    const offsetY = camera.state.y * 0.01;
 
-    // Core glow
     const coreGradient = ctx.createRadialGradient(
         width / 2 - offsetX, height / 2 - offsetY, 0,
-        width / 2 - offsetX, height / 2 - offsetY, Math.max(width, height) * 0.6
+        width / 2 - offsetX, height / 2 - offsetY, Math.max(width, height) * 0.5
     );
-    coreGradient.addColorStop(0, "rgba(69, 162, 158, 0.15)");
-    coreGradient.addColorStop(0.3, "rgba(102, 252, 241, 0.08)");
-    coreGradient.addColorStop(0.6, "rgba(155, 89, 182, 0.04)");
+    coreGradient.addColorStop(0, "rgba(69, 162, 158, 0.12)");
+    coreGradient.addColorStop(0.4, "rgba(102, 252, 241, 0.05)");
+    coreGradient.addColorStop(0.7, "rgba(100, 80, 140, 0.03)");
     coreGradient.addColorStop(1, "rgba(0, 0, 0, 0)");
 
     ctx.fillStyle = coreGradient;
     ctx.fillRect(0, 0, width, height);
-
-    // Secondary nebula patches
-    const patch1 = ctx.createRadialGradient(
-        width * 0.3 - offsetX * 0.5, height * 0.4 - offsetY * 0.5, 0,
-        width * 0.3 - offsetX * 0.5, height * 0.4 - offsetY * 0.5, width * 0.3
-    );
-    patch1.addColorStop(0, "rgba(155, 89, 182, 0.1)");
-    patch1.addColorStop(1, "rgba(0, 0, 0, 0)");
-    ctx.fillStyle = patch1;
-    ctx.fillRect(0, 0, width, height);
 }
 
 /**
- * Render starfield with parallax
+ * Render starfield with parallax - culled
  */
 export function renderStars(
     ctx: CanvasRenderingContext2D,
@@ -67,30 +65,38 @@ export function renderStars(
     config: RenderConfig = DEFAULT_RENDER_CONFIG
 ): void {
     const viewport = camera.getViewport();
+    const margin = 100;
 
     for (const star of stars) {
-        // Apply parallax based on layer (far stars move less)
         const parallaxFactor = 1 - star.layer * config.parallaxStrength;
-        const x = camera.worldToScreenX(star.x * parallaxFactor);
-        const y = camera.worldToScreenY(star.y * parallaxFactor);
+        const worldX = star.x * parallaxFactor;
+        const worldY = star.y * parallaxFactor;
 
-        // Simple culling
-        if (x < -10 || x > viewport.width + 10 || y < -10 || y > viewport.height + 10) {
+        // Viewport culling in world space
+        if (worldX < viewport.left - margin || worldX > viewport.right + margin ||
+            worldY < viewport.top - margin || worldY > viewport.bottom + margin) {
             continue;
         }
 
-        const size = star.size * (0.5 + camera.state.zoom * 0.5);
-        const alpha = star.brightness * (0.5 + star.layer * 0.2);
+        const x = camera.worldToScreenX(worldX);
+        const y = camera.worldToScreenY(worldY);
+        const size = star.size * Math.min(1, camera.state.zoom * 0.8);
 
-        ctx.beginPath();
-        ctx.arc(x, y, size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(200, 220, 255, ${alpha})`;
-        ctx.fill();
+        // Very small stars just as pixels
+        if (size < 0.5) {
+            ctx.fillStyle = `rgba(200, 210, 230, ${star.brightness * 0.5})`;
+            ctx.fillRect(x, y, 1, 1);
+        } else {
+            ctx.beginPath();
+            ctx.arc(x, y, size, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(200, 210, 230, ${star.brightness * 0.7})`;
+            ctx.fill();
+        }
     }
 }
 
 /**
- * Render interactive sectors
+ * Render interactive sectors - with proper colors
  */
 export function renderSectors(
     ctx: CanvasRenderingContext2D,
@@ -99,39 +105,43 @@ export function renderSectors(
     hoveredSector: Sector | null,
     config: RenderConfig = DEFAULT_RENDER_CONFIG
 ): void {
-    const viewport = camera.getViewport();
-
-    // Sort by distance for proper z-ordering
-    const visibleSectors = sectors.filter(s => camera.isVisible(s.x, s.y, 100));
+    // Filter visible sectors first
+    const visibleSectors = sectors.filter(s => camera.isVisible(s.x, s.y, 50));
 
     for (const sector of visibleSectors) {
         const screenX = camera.worldToScreenX(sector.x);
         const screenY = camera.worldToScreenY(sector.y);
-        const size = sector.size * camera.state.zoom;
+        const baseSize = sector.size * camera.state.zoom;
         const isHovered = hoveredSector?.id === sector.id;
+        const size = isHovered ? baseSize * 1.3 : baseSize;
 
         // Skip if too small
         if (size < 1) continue;
 
-        // Glow effect
-        if (config.glowEnabled && size > 3) {
-            const glowSize = size * (isHovered ? 4 : 2.5);
+        // Determine color based on ownership
+        let mainColor: string;
+        let glowColor: string;
+
+        if (sector.myPlanets > 0) {
+            mainColor = isHovered ? COLORS.ownPlanet : COLORS.ownPlanetDim;
+            glowColor = "rgba(102, 252, 241, ";
+        } else if (sector.colonizedPlanets > 0) {
+            mainColor = isHovered ? COLORS.otherPlayer : COLORS.otherPlayerDim;
+            glowColor = "rgba(255, 107, 107, ";
+        } else {
+            mainColor = isHovered ? COLORS.uncolonized : COLORS.uncolonizedDim;
+            glowColor = "rgba(136, 153, 170, ";
+        }
+
+        // Glow effect (only for visible size)
+        if (config.glowEnabled && size > 2) {
+            const glowSize = size * 2;
             const glowGradient = ctx.createRadialGradient(
                 screenX, screenY, 0,
                 screenX, screenY, glowSize
             );
-
-            let glowColor: string;
-            if (sector.myPlanets > 0) {
-                glowColor = "rgba(102, 252, 241, ";
-            } else if (sector.colonizedPlanets > 0) {
-                glowColor = "rgba(255, 107, 107, ";
-            } else {
-                glowColor = "rgba(200, 200, 220, ";
-            }
-
-            glowGradient.addColorStop(0, glowColor + (isHovered ? "0.6)" : "0.3)"));
-            glowGradient.addColorStop(0.5, glowColor + (isHovered ? "0.2)" : "0.1)"));
+            glowGradient.addColorStop(0, glowColor + (isHovered ? "0.4)" : "0.2)"));
+            glowGradient.addColorStop(0.6, glowColor + "0.05)");
             glowGradient.addColorStop(1, glowColor + "0)");
 
             ctx.beginPath();
@@ -143,29 +153,22 @@ export function renderSectors(
         // Core of sector
         ctx.beginPath();
         ctx.arc(screenX, screenY, size, 0, Math.PI * 2);
-
-        if (sector.myPlanets > 0) {
-            ctx.fillStyle = isHovered ? "#66FCF1" : "#45A29E";
-        } else if (sector.colonizedPlanets > 0) {
-            ctx.fillStyle = isHovered ? "#FF8888" : "#FF6B6B";
-        } else {
-            ctx.fillStyle = isHovered ? "#CCCCDD" : sector.color;
-        }
+        ctx.fillStyle = mainColor;
         ctx.fill();
 
         // Brighter center
-        if (size > 4) {
+        if (size > 3) {
             ctx.beginPath();
-            ctx.arc(screenX, screenY, size * 0.4, 0, Math.PI * 2);
-            ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+            ctx.arc(screenX, screenY, size * 0.35, 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
             ctx.fill();
         }
 
         // Hover ring
         if (isHovered) {
             ctx.beginPath();
-            ctx.arc(screenX, screenY, size * 1.5, 0, Math.PI * 2);
-            ctx.strokeStyle = "#66FCF1";
+            ctx.arc(screenX, screenY, size + 4, 0, Math.PI * 2);
+            ctx.strokeStyle = COLORS.ownPlanet;
             ctx.lineWidth = 2;
             ctx.stroke();
         }
@@ -183,37 +186,50 @@ export function renderOverlay(
     height: number
 ): void {
     // Zoom indicator
-    ctx.fillStyle = "rgba(200, 200, 220, 0.6)";
-    ctx.font = "12px monospace";
+    ctx.fillStyle = "rgba(200, 200, 220, 0.5)";
+    ctx.font = "11px monospace";
     ctx.fillText(`Zoom: ${Math.round(camera.state.zoom * 100)}%`, 10, 20);
-    ctx.fillText(`Pos: ${Math.round(camera.state.x)}, ${Math.round(camera.state.y)}`, 10, 36);
 
     // Hovered sector tooltip
     if (hoveredSector) {
         const screenX = camera.worldToScreenX(hoveredSector.x);
         const screenY = camera.worldToScreenY(hoveredSector.y);
 
-        const tooltipX = Math.min(screenX + 20, width - 180);
-        const tooltipY = Math.max(screenY - 60, 10);
+        const tooltipX = Math.min(screenX + 15, width - 160);
+        const tooltipY = Math.max(screenY - 55, 10);
 
         // Background
-        ctx.fillStyle = "rgba(11, 12, 16, 0.9)";
-        ctx.strokeStyle = "rgba(102, 252, 241, 0.5)";
+        ctx.fillStyle = "rgba(11, 12, 16, 0.92)";
+        ctx.strokeStyle = "rgba(102, 252, 241, 0.4)";
         ctx.lineWidth = 1;
         ctx.beginPath();
-        ctx.roundRect(tooltipX, tooltipY, 170, 80, 8);
+        ctx.roundRect(tooltipX, tooltipY, 150, 70, 6);
         ctx.fill();
         ctx.stroke();
 
-        // Text
+        // Title
         ctx.fillStyle = "#66FCF1";
-        ctx.font = "bold 14px sans-serif";
-        ctx.fillText(`Sektor ${hoveredSector.id.split("-")[1] || hoveredSector.id}`, tooltipX + 10, tooltipY + 20);
+        ctx.font = "bold 13px sans-serif";
+        ctx.fillText(`Sektor ${hoveredSector.id.split("-").pop()}`, tooltipX + 10, tooltipY + 18);
 
+        // Stats
         ctx.fillStyle = "#C5C6C7";
-        ctx.font = "12px sans-serif";
-        ctx.fillText(`Planeten: ${hoveredSector.totalPlanets}`, tooltipX + 10, tooltipY + 40);
-        ctx.fillText(`Kolonisiert: ${hoveredSector.colonizedPlanets}`, tooltipX + 10, tooltipY + 55);
-        ctx.fillText(`Eigene: ${hoveredSector.myPlanets}`, tooltipX + 10, tooltipY + 70);
+        ctx.font = "11px sans-serif";
+        ctx.fillText(`Planeten: ${hoveredSector.totalPlanets}`, tooltipX + 10, tooltipY + 36);
+
+        if (hoveredSector.myPlanets > 0) {
+            ctx.fillStyle = COLORS.ownPlanet;
+            ctx.fillText(`Eigene: ${hoveredSector.myPlanets}`, tooltipX + 10, tooltipY + 50);
+        } else if (hoveredSector.colonizedPlanets > 0) {
+            ctx.fillStyle = COLORS.otherPlayer;
+            ctx.fillText(`Kolonisiert: ${hoveredSector.colonizedPlanets}`, tooltipX + 10, tooltipY + 50);
+        } else {
+            ctx.fillStyle = COLORS.uncolonizedDim;
+            ctx.fillText(`Unbesiedelt`, tooltipX + 10, tooltipY + 50);
+        }
+
+        ctx.fillStyle = "#888";
+        ctx.font = "10px sans-serif";
+        ctx.fillText(`Klicke zum Erkunden`, tooltipX + 10, tooltipY + 64);
     }
 }

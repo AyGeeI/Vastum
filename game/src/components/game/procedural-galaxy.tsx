@@ -46,9 +46,10 @@ export function ProceduralGalaxy({ onSelectSector }: ProceduralGalaxyProps) {
     useEffect(() => {
         if (!isInitialized) {
             console.log("Generating galaxy...");
-            sectorsRef.current = generateSectors({ numSectors: 800 });
-            starsRef.current = generateStars({ numStars: 4000 });
-            spatialHashRef.current = new SpatialHash(100);
+            // Uses default: 150 sectors, 1000 stars for performance
+            sectorsRef.current = generateSectors();
+            starsRef.current = generateStars();
+            spatialHashRef.current = new SpatialHash(80);
             spatialHashRef.current.insertAll(sectorsRef.current);
             setIsInitialized(true);
             console.log("Galaxy generated:", sectorsRef.current.length, "sectors");
