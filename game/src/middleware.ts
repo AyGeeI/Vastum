@@ -1,12 +1,21 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import type { NextRequest } from "next/server";
 
 // Protected routes that require authentication
-const protectedRoutes = ["/dashboard", "/planet", "/map", "/fleet", "/alliance", "/market"];
+const protectedRoutes = ["/dashboard", "/planet", "/map", "/fleet", "/alliance", "/market", "/settings"];
+const publicRoutes = ["/", "/login"];
 
-export default auth((req) => {
-    const { pathname } = req.nextUrl;
-    const isAuthenticated = !!req.auth;
+export function middleware(request: NextRequest) {
+    const { pathname } = request.nextUrl;
+
+    // Allow public routes and static assets
+    if (publicRoutes.includes(pathname)) {
+        return NextResponse.next();
+    }
+
+    // Check for session cookie (NextAuth stores session in cookies)
+    const sessionToken = request.cookies.get("authjs.session-token") ||
+        request.cookies.get("__Secure-authjs.session-token");
 
     // Check if the current path is a protected route
     const isProtectedRoute = protectedRoutes.some(
@@ -14,19 +23,14 @@ export default auth((req) => {
     );
 
     // Redirect to login if accessing protected route without auth
-    if (isProtectedRoute && !isAuthenticated) {
-        const loginUrl = new URL("/login", req.url);
+    if (isProtectedRoute && !sessionToken) {
+        const loginUrl = new URL("/login", request.url);
         loginUrl.searchParams.set("callbackUrl", pathname);
         return NextResponse.redirect(loginUrl);
     }
 
-    // Redirect to dashboard if already logged in and accessing login page
-    if (pathname === "/login" && isAuthenticated) {
-        return NextResponse.redirect(new URL("/dashboard", req.url));
-    }
-
     return NextResponse.next();
-});
+}
 
 export const config = {
     matcher: [
