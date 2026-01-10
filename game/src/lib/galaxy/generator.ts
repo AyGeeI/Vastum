@@ -6,6 +6,7 @@
 
 export interface Sector {
     id: string;
+    dbSector: number;    // Maps to database sector (1-25)
     x: number;           // World coordinates
     y: number;
     armIndex: number;    // Which spiral arm (0-3)
@@ -127,8 +128,10 @@ export function generateSectors(config: Partial<GalaxyConfig> = {}): Sector[] {
         const y = Math.sin(angle) * distance * 0.6;
 
         if (!isTooClose(x, y, sectors, cfg.minSectorSpacing * 0.8)) {
+            const sectorNum = sectors.length;
             sectors.push({
-                id: `core-${sectors.length}`,
+                id: `core-${sectorNum}`,
+                dbSector: (sectorNum % 25) + 1,  // Maps to DB sector 1-25
                 x,
                 y,
                 armIndex: -1,
@@ -137,7 +140,7 @@ export function generateSectors(config: Partial<GalaxyConfig> = {}): Sector[] {
                 size: 6,
                 type: 'core',
                 totalPlanets: Math.floor(Math.random() * 15) + 10,
-                colonizedPlanets: 0,  // All uncolonized by default
+                colonizedPlanets: 0,
                 myPlanets: 0,
             });
         }
@@ -154,9 +157,11 @@ export function generateSectors(config: Partial<GalaxyConfig> = {}): Sector[] {
         const point = spiralPoint(angle, armIndex, cfg.numArms, distance, cfg.rotationFactor, cfg.armSpread);
 
         if (!isTooClose(point.x, point.y, sectors, cfg.minSectorSpacing)) {
+            const sectorNum = sectors.length;
             const brightness = 1 - (distance / cfg.galaxyRadius) * 0.4;
             sectors.push({
-                id: `arm-${sectors.length}`,
+                id: `arm-${sectorNum}`,
+                dbSector: (sectorNum % 25) + 1,
                 x: point.x,
                 y: point.y,
                 armIndex,
@@ -165,7 +170,7 @@ export function generateSectors(config: Partial<GalaxyConfig> = {}): Sector[] {
                 size: 4 + Math.random() * 2,
                 type: 'arm',
                 totalPlanets: Math.floor(Math.random() * 12) + 5,
-                colonizedPlanets: 0,  // All uncolonized
+                colonizedPlanets: 0,
                 myPlanets: 0,
             });
         }
@@ -182,8 +187,10 @@ export function generateSectors(config: Partial<GalaxyConfig> = {}): Sector[] {
         const y = Math.sin(angle) * distance * 0.6;
 
         if (!isTooClose(x, y, sectors, cfg.minSectorSpacing * 1.2)) {
+            const sectorNum = sectors.length;
             sectors.push({
-                id: `outer-${sectors.length}`,
+                id: `outer-${sectorNum}`,
+                dbSector: (sectorNum % 25) + 1,
                 x,
                 y,
                 armIndex: -1,
@@ -192,7 +199,7 @@ export function generateSectors(config: Partial<GalaxyConfig> = {}): Sector[] {
                 size: 3,
                 type: 'outer',
                 totalPlanets: Math.floor(Math.random() * 6) + 2,
-                colonizedPlanets: 0,  // All uncolonized
+                colonizedPlanets: 0,
                 myPlanets: 0,
             });
         }

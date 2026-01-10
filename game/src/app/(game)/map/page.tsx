@@ -16,7 +16,7 @@ export default function MapPage() {
         <div className="max-w-7xl mx-auto">
             {selectedSector ? (
                 <SystemView
-                    sector={parseInt(selectedSector.id.split("-")[1] || "1")}
+                    sector={selectedSector.dbSector}
                     onBack={() => setSelectedSector(null)}
                 />
             ) : (
