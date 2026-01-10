@@ -207,10 +207,10 @@ export function renderOverlay(
         ctx.fill();
         ctx.stroke();
 
-        // Title
+        // Title - use dbSector to match database
         ctx.fillStyle = "#66FCF1";
         ctx.font = "bold 13px sans-serif";
-        ctx.fillText(`Sektor ${hoveredSector.id.split("-").pop()}`, tooltipX + 10, tooltipY + 18);
+        ctx.fillText(`Sektor ${hoveredSector.dbSector}`, tooltipX + 10, tooltipY + 18);
 
         // Stats
         ctx.fillStyle = "#C5C6C7";
