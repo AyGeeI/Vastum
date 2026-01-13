@@ -46,7 +46,7 @@ export function ProceduralGalaxy({ onSelectSector }: ProceduralGalaxyProps) {
     useEffect(() => {
         if (!isInitialized) {
             console.log("Generating galaxy...");
-            // Uses default: 150 sectors, 1000 stars for performance
+            // Generates exactly 25 sectors (1-25) with consistent positions
             sectorsRef.current = generateSectors();
             starsRef.current = generateStars();
             spatialHashRef.current = new SpatialHash(80);
