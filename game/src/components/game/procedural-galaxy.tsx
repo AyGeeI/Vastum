@@ -56,6 +56,41 @@ export function ProceduralGalaxy({ onSelectSector }: ProceduralGalaxyProps) {
         }
     }, [isInitialized]);
 
+    // Fetch real ownership data from database
+    useEffect(() => {
+        if (!isInitialized) return;
+
+        const fetchOwnership = async () => {
+            try {
+                const response = await fetch("/api/galaxy/ownership");
+                if (response.ok) {
+                    const data = await response.json();
+                    // Update sectors with real ownership data
+                    sectorsRef.current = sectorsRef.current.map(sector => {
+                        const ownership = data.sectors.find((s: { sector: number }) => s.sector === sector.dbSector);
+                        if (ownership) {
+                            return {
+                                ...sector,
+                                totalPlanets: ownership.totalPlanets,
+                                colonizedPlanets: ownership.colonizedPlanets,
+                                myPlanets: ownership.myPlanets,
+                            };
+                        }
+                        return sector;
+                    });
+                    // Re-insert into spatial hash
+                    spatialHashRef.current = new SpatialHash(80);
+                    spatialHashRef.current.insertAll(sectorsRef.current);
+                    console.log("Ownership data loaded");
+                }
+            } catch (err) {
+                console.error("Error fetching ownership:", err);
+            }
+        };
+
+        fetchOwnership();
+    }, [isInitialized]);
+
     // Update dimensions on resize
     useEffect(() => {
         const updateDimensions = () => {
