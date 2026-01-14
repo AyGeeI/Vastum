@@ -79,7 +79,7 @@ export function PlanetView({ planet, resources, buildings, allPlanets }: PlanetV
                         <hr className="border-border" />
 
                         <div className="space-y-2">
-                            <h4 className="text-sm font-medium text-primary">Ressourcen-Boni</h4>
+                            <p className="text-sm font-semibold text-primary">Ressourcen-Boni</p>
                             <div className="grid grid-cols-2 gap-2 text-sm">
                                 <div className="flex justify-between">
                                     <span className="text-foreground-muted">Metall</span>

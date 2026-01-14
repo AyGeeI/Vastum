@@ -73,8 +73,10 @@ export function GameHeader({ user, resources: initialResources, planets = [], cu
                 <button
                     className="md:hidden text-foreground/60 hover:text-primary"
                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                    aria-label="Menü öffnen"
+                    aria-expanded={mobileMenuOpen}
                 >
-                    <Menu className="w-6 h-6" />
+                    <Menu className="w-6 h-6" aria-hidden="true" />
                 </button>
                 <Link href="/dashboard" className="flex items-center gap-2">
                     <h1 className="text-xl font-display tracking-widest text-gradient">
@@ -131,9 +133,12 @@ export function GameHeader({ user, resources: initialResources, planets = [], cu
                 )}
 
                 {/* Notifications */}
-                <button className="relative text-foreground/60 hover:text-primary transition-colors">
-                    <Bell className="w-5 h-5" />
-                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-danger rounded-full text-[10px] flex items-center justify-center text-white">
+                <button
+                    className="relative text-foreground/60 hover:text-primary transition-colors"
+                    aria-label="3 neue Benachrichtigungen"
+                >
+                    <Bell className="w-5 h-5" aria-hidden="true" />
+                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-danger rounded-full text-[10px] flex items-center justify-center text-white" aria-hidden="true">
                         3
                     </span>
                 </button>
@@ -165,7 +170,7 @@ export function GameHeader({ user, resources: initialResources, planets = [], cu
                     onClick={() => signOut({ callbackUrl: "/" })}
                     className="text-foreground/60"
                 >
-                    <LogOut className="w-4 h-4" />
+                    <LogOut className="w-4 h-4" aria-hidden="true" />
                 </Button>
             </div>
         </header>

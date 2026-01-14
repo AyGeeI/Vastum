@@ -384,10 +384,10 @@ export function BuildingList({ buildings, planetId, resources: initialResources 
                     <div className="flex items-start justify-between mb-3">
                         <div>
                             <h4 className="font-medium flex items-center gap-2 text-foreground">
-                                <Building className="w-4 h-4 text-primary" />
+                                <Building className="w-4 h-4 text-primary" aria-hidden="true" />
                                 {def.name}
                             </h4>
-                            <p className="text-xs text-foreground/60 mt-1">
+                            <p className="text-xs text-foreground/70 mt-1">
                                 Level {building.level} {building.level < def.maxLevel && `/ ${def.maxLevel}`}
                             </p>
                         </div>
@@ -423,25 +423,25 @@ export function BuildingList({ buildings, planetId, resources: initialResources 
 
                             {/* Upgrade Cost */}
                             <div className="bg-background/50 border border-border rounded-lg p-3 mb-3 space-y-2">
-                                <div className="text-xs uppercase tracking-wider text-foreground/60 mb-2">
+                                <div className="text-xs uppercase tracking-wider text-foreground/70 mb-2">
                                     Kosten für Level {nextLevel}
                                 </div>
                                 <div className="grid grid-cols-3 gap-2 text-sm">
                                     <div className={cost.metal > resources.metal ? "text-danger" : "text-foreground"}>
-                                        <span className="block text-foreground/60 text-xs">Metall</span>
+                                        <span className="block text-foreground/70 text-xs">Metall</span>
                                         {formatNumber(cost.metal)}
                                     </div>
                                     <div className={cost.crystal > resources.crystal ? "text-danger" : "text-foreground"}>
-                                        <span className="block text-foreground/60 text-xs">Kristall</span>
+                                        <span className="block text-foreground/70 text-xs">Kristall</span>
                                         {formatNumber(cost.crystal)}
                                     </div>
                                     <div className={cost.deuterium > resources.deuterium ? "text-danger" : "text-foreground"}>
-                                        <span className="block text-foreground/60 text-xs">Deuterium</span>
+                                        <span className="block text-foreground/70 text-xs">Deuterium</span>
                                         {formatNumber(cost.deuterium)}
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-1 text-sm text-foreground/60 pt-2 border-t border-border">
-                                    <Clock className="w-3 h-3" />
+                                <div className="flex items-center gap-1 text-sm text-foreground/70 pt-2 border-t border-border">
+                                    <Clock className="w-3 h-3" aria-hidden="true" />
                                     <span>Bauzeit: {formatDuration(buildTime)}</span>
                                 </div>
                             </div>

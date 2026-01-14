@@ -60,9 +60,12 @@ export function Sidebar({ planets = [], currentPlanetId }: SidebarProps) {
                     <button
                         onClick={() => setPlanetMenuOpen(!planetMenuOpen)}
                         className="w-full flex items-center justify-between px-3 py-2 bg-background rounded-lg border border-border hover:border-primary/50 transition-colors"
+                        aria-expanded={planetMenuOpen}
+                        aria-haspopup="listbox"
+                        aria-label={`Planet auswählen, aktuell: ${currentPlanet?.name || "Kein Planet"}`}
                     >
                         <div className="flex items-center gap-2">
-                            <Globe className="w-4 h-4 text-primary" />
+                            <Globe className="w-4 h-4 text-primary" aria-hidden="true" />
                             <span className="font-medium text-sm">
                                 {currentPlanet?.name || "Kein Planet"}
                             </span>
@@ -71,13 +74,13 @@ export function Sidebar({ planets = [], currentPlanetId }: SidebarProps) {
                             <ChevronDown className={cn(
                                 "w-4 h-4 text-foreground-muted transition-transform",
                                 planetMenuOpen && "rotate-180"
-                            )} />
+                            )} aria-hidden="true" />
                         )}
                     </button>
 
                     {/* Planet Dropdown */}
                     {planetMenuOpen && planets.length > 1 && (
-                        <div className="mt-2 bg-background border border-border rounded-lg overflow-hidden">
+                        <div className="mt-2 bg-background border border-border rounded-lg overflow-hidden" role="listbox">
                             {planets.map(planet => (
                                 <button
                                     key={planet.id}
@@ -86,8 +89,10 @@ export function Sidebar({ planets = [], currentPlanetId }: SidebarProps) {
                                         "w-full px-3 py-2 text-left text-sm hover:bg-primary/10 transition-colors flex items-center gap-2",
                                         planet.id === currentPlanetId && "bg-primary/20 text-primary"
                                     )}
+                                    role="option"
+                                    aria-selected={planet.id === currentPlanetId}
                                 >
-                                    <Globe className="w-4 h-4" />
+                                    <Globe className="w-4 h-4" aria-hidden="true" />
                                     {planet.name}
                                 </button>
                             ))}
@@ -118,7 +123,7 @@ export function Sidebar({ planets = [], currentPlanetId }: SidebarProps) {
                                     : "text-foreground-muted"
                             )}
                         >
-                            <Icon className="w-5 h-5" />
+                            <Icon className="w-5 h-5" aria-hidden="true" />
                             <span className="font-medium">{item.label}</span>
                             {item.badge && (
                                 <span className="ml-auto bg-danger text-white text-xs px-2 py-0.5 rounded-full">
@@ -137,7 +142,7 @@ export function Sidebar({ planets = [], currentPlanetId }: SidebarProps) {
                             "hover:bg-primary/10 hover:text-primary text-foreground-muted"
                         )}
                     >
-                        <Settings className="w-5 h-5" />
+                        <Settings className="w-5 h-5" aria-hidden="true" />
                         <span className="font-medium">Einstellungen</span>
                     </Link>
                 </div>

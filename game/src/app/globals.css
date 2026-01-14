@@ -21,7 +21,13 @@
   --background: var(--void-black);
   --background-elevated: var(--deep-space);
   --foreground: var(--star-dust);
-  --foreground-muted: #8B8C8D;
+  --foreground-muted: #A0A1A2;
+
+  /* Ressourcen-Farben - Einzigartig & WCAG AA konform */
+  --resource-metal: #B4B8C0;
+  --resource-crystal: #00D4FF;
+  --resource-deuterium: #7CFF5A;
+  --resource-energy: #FF9F43;
   --primary: var(--neon-cyan);
   --primary-bright: var(--neon-cyan-bright);
   --danger: var(--alert-red);
@@ -50,6 +56,12 @@
   --color-accent: var(--accent);
   --color-border: var(--border);
   --color-border-bright: var(--border-bright);
+
+  /* Ressourcen-Farben für Tailwind */
+  --color-resource-metal: var(--resource-metal);
+  --color-resource-crystal: var(--resource-crystal);
+  --color-resource-deuterium: var(--resource-deuterium);
+  --color-resource-energy: var(--resource-energy);
 
   --font-sans: var(--font-inter);
   --font-display: var(--font-orbitron);
@@ -214,4 +226,60 @@ select:focus {
 input::placeholder,
 textarea::placeholder {
   color: var(--foreground-muted);
+}
+
+/* ========================================
+   Focus Styles (WCAG 2.4.7)
+   ======================================== */
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--neon-cyan);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Cursor Styles für interaktive Elemente */
+button,
+[role="button"],
+a,
+summary {
+  cursor: pointer;
+}
+
+button:disabled,
+[aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
+/* Skip Link für Tastaturbedienung */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 4px;
+  background: var(--primary);
+  color: var(--void-black);
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  z-index: 100;
+  font-weight: 500;
+}
+
+.skip-link:focus {
+  top: 4px;
+}
+
+/* ========================================
+   Reduced Motion (WCAG 2.3.3)
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
