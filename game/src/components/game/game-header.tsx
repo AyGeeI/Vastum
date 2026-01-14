@@ -98,17 +98,17 @@ export function GameHeader({ user, resources: initialResources, planets = [], cu
                             label="Kristall"
                             value={Math.floor(resources.crystal)}
                             production={Math.floor(resources.crystal_production)}
-                            color="text-primary"
+                            color="text-resource-crystal"
                         />
                         <ResourceDisplay
                             label="Deuterium"
                             value={Math.floor(resources.deuterium)}
                             production={Math.floor(resources.deuterium_production)}
-                            color="text-accent"
+                            color="text-resource-deuterium"
                         />
                         <div className="flex items-center gap-2">
                             <span className="text-foreground/60 text-xs uppercase">Energie:</span>
-                            <span className={`font-medium ${energyBalance >= 0 ? "text-positive" : "text-danger"}`}>
+                            <span className={`font-medium ${energyBalance >= 0 ? "text-resource-energy" : "text-danger"}`}>
                                 {energyProduction}
                                 <span className="text-foreground/50">/{energyConsumption}</span>
                             </span>

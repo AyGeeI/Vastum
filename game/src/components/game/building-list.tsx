@@ -407,8 +407,8 @@ export function BuildingList({ buildings, planetId, resources: initialResources 
                                     <div className="mb-3 space-y-1">
                                         {benefits.positive.map((benefit, i) => (
                                             <div key={`pos-${i}`} className="flex items-center gap-2 text-sm">
-                                                <TrendingUp className="w-4 h-4 text-accent flex-shrink-0" />
-                                                <span className="text-accent">{benefit}</span>
+                                                <TrendingUp className="w-4 h-4 text-positive flex-shrink-0" />
+                                                <span className="text-positive">{benefit}</span>
                                             </div>
                                         ))}
                                         {benefits.negative.map((drawback, i) => (

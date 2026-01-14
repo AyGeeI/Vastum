@@ -44,80 +44,78 @@ export function PlanetView({ planet, resources, buildings, allPlanets }: PlanetV
             {/* Resource Overview */}
             <ResourceBar resources={resources} planetId={planet.id} />
 
-            {/* Planet Stats & Buildings Grid */}
-            <div className="grid lg:grid-cols-3 gap-6">
-                {/* Planet Info */}
+            {/* Planet Stats & Buildings - Full Width Layout */}
+            <div className="space-y-6">
+                {/* Planet Info - Full Width */}
                 <Card variant="bordered">
                     <CardHeader>
                         <CardTitle>Planeten-Daten</CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div className="flex items-center justify-between">
-                            <span className="text-foreground-muted flex items-center gap-2">
-                                <MapPin className="w-4 h-4" />
-                                Position
-                            </span>
-                            <span className="font-medium">
-                                [{planet.position_x}, {planet.position_y}]
-                            </span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                            <span className="text-foreground-muted flex items-center gap-2">
-                                <Maximize className="w-4 h-4" />
-                                Größe
-                            </span>
-                            <span className="font-medium">{planet.size} Felder</span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                            <span className="text-foreground-muted flex items-center gap-2">
-                                <Thermometer className="w-4 h-4" />
-                                Temperatur
-                            </span>
-                            <span className="font-medium">{planet.temperature}°C</span>
-                        </div>
+                    <CardContent>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div className="flex flex-col gap-1">
+                                <span className="text-foreground-muted flex items-center gap-2 text-sm">
+                                    <MapPin className="w-4 h-4" />
+                                    Position
+                                </span>
+                                <span className="font-medium">
+                                    [{planet.position_x}, {planet.position_y}]
+                                </span>
+                            </div>
+                            <div className="flex flex-col gap-1">
+                                <span className="text-foreground-muted flex items-center gap-2 text-sm">
+                                    <Maximize className="w-4 h-4" />
+                                    Größe
+                                </span>
+                                <span className="font-medium">{planet.size} Felder</span>
+                            </div>
+                            <div className="flex flex-col gap-1">
+                                <span className="text-foreground-muted flex items-center gap-2 text-sm">
+                                    <Thermometer className="w-4 h-4" />
+                                    Temperatur
+                                </span>
+                                <span className="font-medium">{planet.temperature}°C</span>
+                            </div>
 
-                        <hr className="border-border" />
-
-                        <div className="space-y-2">
-                            <p className="text-sm font-semibold text-primary">Ressourcen-Boni</p>
-                            <div className="grid grid-cols-2 gap-2 text-sm">
-                                <div className="flex justify-between">
-                                    <span className="text-foreground-muted">Metall</span>
-                                    <span className={planet.metal_bonus > 1 ? "text-positive" : planet.metal_bonus < 1 ? "text-danger" : ""}>
-                                        {(planet.metal_bonus * 100).toFixed(0)}%
-                                    </span>
-                                </div>
-                                <div className="flex justify-between">
-                                    <span className="text-foreground-muted">Kristall</span>
-                                    <span className={planet.crystal_bonus > 1 ? "text-positive" : planet.crystal_bonus < 1 ? "text-danger" : ""}>
-                                        {(planet.crystal_bonus * 100).toFixed(0)}%
-                                    </span>
-                                </div>
-                                <div className="flex justify-between">
-                                    <span className="text-foreground-muted">Deuterium</span>
-                                    <span className={planet.deuterium_bonus > 1 ? "text-positive" : planet.deuterium_bonus < 1 ? "text-danger" : ""}>
-                                        {(planet.deuterium_bonus * 100).toFixed(0)}%
-                                    </span>
-                                </div>
-                                <div className="flex justify-between">
-                                    <span className="text-foreground-muted">Energie</span>
-                                    <span className={planet.energy_bonus > 1 ? "text-positive" : planet.energy_bonus < 1 ? "text-danger" : ""}>
-                                        {(planet.energy_bonus * 100).toFixed(0)}%
-                                    </span>
+                            <div className="space-y-2">
+                                <p className="text-sm font-semibold text-primary">Ressourcen-Boni</p>
+                                <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
+                                    <div className="flex justify-between">
+                                        <span className="text-foreground-muted">Metall</span>
+                                        <span className={planet.metal_bonus > 1 ? "text-positive" : planet.metal_bonus < 1 ? "text-danger" : ""}>
+                                            {(planet.metal_bonus * 100).toFixed(0)}%
+                                        </span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                        <span className="text-foreground-muted">Kristall</span>
+                                        <span className={planet.crystal_bonus > 1 ? "text-positive" : planet.crystal_bonus < 1 ? "text-danger" : ""}>
+                                            {(planet.crystal_bonus * 100).toFixed(0)}%
+                                        </span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                        <span className="text-foreground-muted">Deuterium</span>
+                                        <span className={planet.deuterium_bonus > 1 ? "text-positive" : planet.deuterium_bonus < 1 ? "text-danger" : ""}>
+                                            {(planet.deuterium_bonus * 100).toFixed(0)}%
+                                        </span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                        <span className="text-foreground-muted">Energie</span>
+                                        <span className={planet.energy_bonus > 1 ? "text-positive" : planet.energy_bonus < 1 ? "text-danger" : ""}>
+                                            {(planet.energy_bonus * 100).toFixed(0)}%
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </CardContent>
                 </Card>
 
-                {/* Buildings */}
-                <div className="lg:col-span-2">
-                    <BuildingList
-                        buildings={buildings}
-                        planetId={planet.id}
-                        resources={resources}
-                    />
-                </div>
+                {/* Buildings - Full Width */}
+                <BuildingList
+                    buildings={buildings}
+                    planetId={planet.id}
+                    resources={resources}
+                />
             </div>
         </div>
     );

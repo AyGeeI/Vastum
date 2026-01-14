@@ -21,7 +21,7 @@
   --background: var(--void-black);
   --background-elevated: var(--deep-space);
   --foreground: var(--star-dust);
-  --foreground-muted: #A0A1A2;
+  --foreground-muted: #C5C6C7;
 
   /* Status-Farben (WCAG AA konform) */
   --positive: #22C55E;
