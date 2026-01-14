@@ -83,25 +83,25 @@ export function PlanetView({ planet, resources, buildings, allPlanets }: PlanetV
                             <div className="grid grid-cols-2 gap-2 text-sm">
                                 <div className="flex justify-between">
                                     <span className="text-foreground-muted">Metall</span>
-                                    <span className={planet.metal_bonus > 1 ? "text-green-400" : planet.metal_bonus < 1 ? "text-red-400" : ""}>
+                                    <span className={planet.metal_bonus > 1 ? "text-positive" : planet.metal_bonus < 1 ? "text-danger" : ""}>
                                         {(planet.metal_bonus * 100).toFixed(0)}%
                                     </span>
                                 </div>
                                 <div className="flex justify-between">
                                     <span className="text-foreground-muted">Kristall</span>
-                                    <span className={planet.crystal_bonus > 1 ? "text-green-400" : planet.crystal_bonus < 1 ? "text-red-400" : ""}>
+                                    <span className={planet.crystal_bonus > 1 ? "text-positive" : planet.crystal_bonus < 1 ? "text-danger" : ""}>
                                         {(planet.crystal_bonus * 100).toFixed(0)}%
                                     </span>
                                 </div>
                                 <div className="flex justify-between">
                                     <span className="text-foreground-muted">Deuterium</span>
-                                    <span className={planet.deuterium_bonus > 1 ? "text-green-400" : planet.deuterium_bonus < 1 ? "text-red-400" : ""}>
+                                    <span className={planet.deuterium_bonus > 1 ? "text-positive" : planet.deuterium_bonus < 1 ? "text-danger" : ""}>
                                         {(planet.deuterium_bonus * 100).toFixed(0)}%
                                     </span>
                                 </div>
                                 <div className="flex justify-between">
                                     <span className="text-foreground-muted">Energie</span>
-                                    <span className={planet.energy_bonus > 1 ? "text-green-400" : planet.energy_bonus < 1 ? "text-red-400" : ""}>
+                                    <span className={planet.energy_bonus > 1 ? "text-positive" : planet.energy_bonus < 1 ? "text-danger" : ""}>
                                         {(planet.energy_bonus * 100).toFixed(0)}%
                                     </span>
                                 </div>

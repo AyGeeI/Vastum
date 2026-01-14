@@ -108,7 +108,7 @@ export function GameHeader({ user, resources: initialResources, planets = [], cu
                         />
                         <div className="flex items-center gap-2">
                             <span className="text-foreground/60 text-xs uppercase">Energie:</span>
-                            <span className={`font-medium ${energyBalance >= 0 ? "text-secondary" : "text-danger"}`}>
+                            <span className={`font-medium ${energyBalance >= 0 ? "text-positive" : "text-danger"}`}>
                                 {energyProduction}
                                 <span className="text-foreground/50">/{energyConsumption}</span>
                             </span>
@@ -169,6 +169,7 @@ export function GameHeader({ user, resources: initialResources, planets = [], cu
                     size="sm"
                     onClick={() => signOut({ callbackUrl: "/" })}
                     className="text-foreground/60"
+                    aria-label="Abmelden"
                 >
                     <LogOut className="w-4 h-4" aria-hidden="true" />
                 </Button>
@@ -195,7 +196,7 @@ function ResourceDisplay({
                 {formatNumber(value)}
             </span>
             {production > 0 && (
-                <span className="text-xs text-accent">
+                <span className="text-xs text-positive">
                     (+{formatNumber(production)}/h)
                 </span>
             )}

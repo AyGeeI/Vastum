@@ -151,7 +151,7 @@ function StatCard({
                     <span className="text-3xl font-display text-gradient">{value}</span>
                     {trend && (
                         <span
-                            className={`text-xs ${trendUp ? "text-green-400" : "text-foreground-muted"
+                            className={`text-xs ${trendUp ? "text-positive" : "text-foreground-muted"
                                 }`}
                         >
                             {trend}

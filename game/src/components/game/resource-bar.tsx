@@ -176,11 +176,11 @@ export function ResourceBar({ resources: initialResources, planetId }: ResourceB
                             <span className="text-xs uppercase tracking-wider text-foreground/70">
                                 Energie
                             </span>
-                            <span className={`text-xs font-medium ${isEnergyPositive ? "text-green-400" : "text-danger"}`}>
+                            <span className={`text-xs font-medium ${isEnergyPositive ? "text-positive" : "text-danger"}`}>
                                 {isEnergyPositive ? "+" : ""}{energyBalance}
                             </span>
                         </div>
-                        <div className={`text-xl font-display ${isEnergyPositive ? "text-resource-energy" : "text-danger"}`}>
+                        <div className={`text-xl font-display ${isEnergyPositive ? "text-positive" : "text-danger"}`}>
                             {formatNumber(resources.energy_production)}
                         </div>
                         <div
