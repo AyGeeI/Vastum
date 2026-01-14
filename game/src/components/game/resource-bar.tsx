@@ -74,9 +74,9 @@ export function ResourceBar({ resources: initialResources, planetId }: ResourceB
                             <span className="text-xs uppercase tracking-wider text-foreground/70">
                                 Metall
                             </span>
-                            <span className={`text-xs ${isEnergyPositive ? "text-accent" : "text-danger"}`}>
+                            <span className={`text-xs ${isEnergyPositive ? "text-foreground/70" : "text-danger"}`}>
                                 +{formatNumber(Math.floor(resources.metal_production * (efficiency / 100)))}/h
-                                {!isEnergyPositive && <span className="text-foreground/70 ml-1">({efficiency}%)</span>}
+                                {!isEnergyPositive && <span className="text-danger/70 ml-1">({efficiency}%)</span>}
                             </span>
                         </div>
                         <div className="text-xl font-display text-resource-metal">
@@ -108,9 +108,9 @@ export function ResourceBar({ resources: initialResources, planetId }: ResourceB
                             <span className="text-xs uppercase tracking-wider text-foreground/70">
                                 Kristall
                             </span>
-                            <span className={`text-xs ${isEnergyPositive ? "text-accent" : "text-danger"}`}>
+                            <span className={`text-xs ${isEnergyPositive ? "text-foreground/70" : "text-danger"}`}>
                                 +{formatNumber(Math.floor(resources.crystal_production * (efficiency / 100)))}/h
-                                {!isEnergyPositive && <span className="text-foreground/70 ml-1">({efficiency}%)</span>}
+                                {!isEnergyPositive && <span className="text-danger/70 ml-1">({efficiency}%)</span>}
                             </span>
                         </div>
                         <div className="text-xl font-display text-resource-crystal">
@@ -142,9 +142,9 @@ export function ResourceBar({ resources: initialResources, planetId }: ResourceB
                             <span className="text-xs uppercase tracking-wider text-foreground/70">
                                 Deuterium
                             </span>
-                            <span className={`text-xs ${isEnergyPositive ? "text-accent" : "text-danger"}`}>
+                            <span className={`text-xs ${isEnergyPositive ? "text-foreground/70" : "text-danger"}`}>
                                 +{formatNumber(Math.floor(resources.deuterium_production * (efficiency / 100)))}/h
-                                {!isEnergyPositive && <span className="text-foreground/70 ml-1">({efficiency}%)</span>}
+                                {!isEnergyPositive && <span className="text-danger/70 ml-1">({efficiency}%)</span>}
                             </span>
                         </div>
                         <div className="text-xl font-display text-resource-deuterium">
@@ -176,7 +176,7 @@ export function ResourceBar({ resources: initialResources, planetId }: ResourceB
                             <span className="text-xs uppercase tracking-wider text-foreground/70">
                                 Energie
                             </span>
-                            <span className={`text-xs font-medium ${isEnergyPositive ? "text-accent" : "text-danger"}`}>
+                            <span className={`text-xs font-medium ${isEnergyPositive ? "text-green-400" : "text-danger"}`}>
                                 {isEnergyPositive ? "+" : ""}{energyBalance}
                             </span>
                         </div>
