@@ -71,7 +71,7 @@ export function GameHeader({ user, resources: initialResources, planets = [], cu
             {/* Logo */}
             <div className="flex items-center gap-4">
                 <button
-                    className="md:hidden text-foreground/60 hover:text-primary"
+                    className="md:hidden text-foreground-muted hover:text-primary"
                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                     aria-label="Menü öffnen"
                     aria-expanded={mobileMenuOpen}
@@ -107,15 +107,15 @@ export function GameHeader({ user, resources: initialResources, planets = [], cu
                             color="text-resource-deuterium"
                         />
                         <div className="flex items-center gap-2">
-                            <span className="text-foreground/60 text-xs uppercase">Energie:</span>
+                            <span className="text-foreground-muted text-xs uppercase">Energie:</span>
                             <span className={`font-medium ${energyBalance >= 0 ? "text-resource-energy" : "text-danger"}`}>
                                 {energyProduction}
-                                <span className="text-foreground/50">/{energyConsumption}</span>
+                                <span className="text-foreground-muted">/{energyConsumption}</span>
                             </span>
                         </div>
                     </>
                 ) : (
-                    <span className="text-foreground/60 text-xs">Wähle einen Planeten</span>
+                    <span className="text-foreground-muted text-xs">Wähle einen Planeten</span>
                 )}
             </div>
 
@@ -124,17 +124,17 @@ export function GameHeader({ user, resources: initialResources, planets = [], cu
                 {/* Planet Selector (if multiple planets) */}
                 {planets.length > 1 && (
                     <div className="hidden md:flex items-center gap-2 text-sm">
-                        <span className="text-foreground/60">Planet:</span>
+                        <span className="text-foreground-muted">Planet:</span>
                         <span className="text-primary font-medium">
                             {planets.find(p => p.id === currentPlanetId)?.name || "Unbekannt"}
                         </span>
-                        <ChevronDown className="w-4 h-4 text-foreground/50" />
+                        <ChevronDown className="w-4 h-4 text-foreground-muted" />
                     </div>
                 )}
 
                 {/* Notifications */}
                 <button
-                    className="relative text-foreground/60 hover:text-primary transition-colors"
+                    className="relative text-foreground-muted hover:text-primary transition-colors"
                     aria-label="3 neue Benachrichtigungen"
                 >
                     <Bell className="w-5 h-5" aria-hidden="true" />
@@ -168,7 +168,7 @@ export function GameHeader({ user, resources: initialResources, planets = [], cu
                     variant="ghost"
                     size="sm"
                     onClick={() => signOut({ callbackUrl: "/" })}
-                    className="text-foreground/60"
+                    className="text-foreground-muted"
                     aria-label="Abmelden"
                 >
                     <LogOut className="w-4 h-4" aria-hidden="true" />
@@ -191,7 +191,7 @@ function ResourceDisplay({
 }) {
     return (
         <div className="flex items-center gap-2">
-            <span className="text-foreground/60 text-xs uppercase">{label}:</span>
+            <span className="text-foreground-muted text-xs uppercase">{label}:</span>
             <span className={`font-medium ${color}`}>
                 {formatNumber(value)}
             </span>

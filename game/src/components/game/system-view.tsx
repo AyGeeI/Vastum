@@ -126,7 +126,7 @@ export function SystemView({ sector, onBack }: SystemViewProps) {
                             <Target className="w-7 h-7" />
                             Sektor {sector} - System {currentSystem}
                         </h2>
-                        <p className="text-foreground/60 mt-1">
+                        <p className="text-foreground-muted mt-1">
                             Koordinaten: 1:{sector}:{currentSystem}
                         </p>
                     </div>
@@ -176,7 +176,7 @@ export function SystemView({ sector, onBack }: SystemViewProps) {
                             <Loader2 className="w-8 h-8 text-primary animate-spin" />
                         </div>
                     ) : planets.length === 0 ? (
-                        <div className="text-center py-12 text-foreground/60">
+                        <div className="text-center py-12 text-foreground-muted">
                             Keine Planeten in diesem System gefunden
                         </div>
                     ) : (
@@ -191,10 +191,10 @@ export function SystemView({ sector, onBack }: SystemViewProps) {
                                             key={pos}
                                             className="flex items-center gap-4 p-4 rounded-lg border border-dashed border-foreground/10"
                                         >
-                                            <div className="w-8 text-center font-mono text-foreground/30">
+                                            <div className="w-8 text-center font-mono text-foreground-muted">
                                                 {pos}
                                             </div>
-                                            <div className="text-foreground/30 text-sm">
+                                            <div className="text-foreground-muted text-sm">
                                                 Leere Position
                                             </div>
                                         </div>
@@ -207,14 +207,14 @@ export function SystemView({ sector, onBack }: SystemViewProps) {
                                         className={`flex items-center gap-4 p-4 rounded-lg border-2 transition-all ${getPlanetColor(planet)}`}
                                     >
                                         {/* Position */}
-                                        <div className="w-8 text-center font-mono text-foreground/60">
+                                        <div className="w-8 text-center font-mono text-foreground-muted">
                                             {pos}
                                         </div>
 
                                         {/* Planet Icon */}
                                         <div className={`w-10 h-10 rounded-full flex items-center justify-center ${planet.is_mine ? "bg-primary/20" : planet.is_colonized ? "bg-danger/20" : "bg-foreground/10"
                                             }`}>
-                                            <Globe className={`w-5 h-5 ${planet.is_mine ? "text-primary" : planet.is_colonized ? "text-danger" : "text-foreground/50"
+                                            <Globe className={`w-5 h-5 ${planet.is_mine ? "text-primary" : planet.is_colonized ? "text-danger" : "text-foreground-muted"
                                                 }`} />
                                         </div>
 
@@ -222,11 +222,11 @@ export function SystemView({ sector, onBack }: SystemViewProps) {
                                         <div className="flex-1">
                                             <div className="flex items-center gap-2">
                                                 <span className="font-medium">{planet.name}</span>
-                                                <span className="text-xs text-foreground/50 px-2 py-0.5 bg-foreground/10 rounded">
+                                                <span className="text-xs text-foreground-muted px-2 py-0.5 bg-foreground/10 rounded">
                                                     {getPlanetTypeLabel(planet.type)}
                                                 </span>
                                             </div>
-                                            <div className="text-sm text-foreground/60 mt-1">
+                                            <div className="text-sm text-foreground-muted mt-1">
                                                 Größe: {planet.size} Felder
                                             </div>
                                         </div>
@@ -244,7 +244,7 @@ export function SystemView({ sector, onBack }: SystemViewProps) {
                                                     {planet.owner_name || "Unbekannt"}
                                                 </span>
                                             ) : (
-                                                <span className="text-sm text-foreground/50">
+                                                <span className="text-sm text-foreground-muted">
                                                     Unkolonisiert
                                                 </span>
                                             )}
@@ -294,7 +294,7 @@ export function SystemView({ sector, onBack }: SystemViewProps) {
                         <Rocket className="w-5 h-5 text-accent" />
                         <div>
                             <h4 className="font-medium text-foreground">Kolonisierungskosten</h4>
-                            <p className="text-sm text-foreground/60">
+                            <p className="text-sm text-foreground-muted">
                                 10.000 Metall, 5.000 Kristall, 2.500 Deuterium (werden von deinem Hauptplaneten abgezogen)
                             </p>
                         </div>

@@ -60,7 +60,7 @@ export function ResourceBar({ resources: initialResources, planetId }: ResourceB
                         <AlertTriangle className="w-5 h-5 text-danger flex-shrink-0" aria-hidden="true" />
                         <div>
                             <p className="text-sm font-medium text-danger">Energiemangel</p>
-                            <p className="text-sm text-foreground/70">
+                            <p className="text-sm text-foreground-muted">
                                 Produktionseffizienz: {efficiency}% - Baue mehr Solarkraftwerke oder einen Fusionsreaktor
                             </p>
                         </div>
@@ -71,7 +71,7 @@ export function ResourceBar({ resources: initialResources, planetId }: ResourceB
                     {/* Metal */}
                     <div className="space-y-1">
                         <div className="flex items-center justify-between">
-                            <span className="text-xs uppercase tracking-wider text-foreground/70">
+                            <span className="text-xs uppercase tracking-wider text-foreground-muted">
                                 Metall
                             </span>
                             <span className={`text-xs ${isEnergyPositive ? "text-positive" : "text-danger"}`}>
@@ -97,7 +97,7 @@ export function ResourceBar({ resources: initialResources, planetId }: ResourceB
                                 }}
                             />
                         </div>
-                        <div className="text-xs text-foreground/70 text-right">
+                        <div className="text-xs text-foreground-muted text-right">
                             / {formatNumber(resources.metal_capacity)}
                         </div>
                     </div>
@@ -105,7 +105,7 @@ export function ResourceBar({ resources: initialResources, planetId }: ResourceB
                     {/* Crystal */}
                     <div className="space-y-1">
                         <div className="flex items-center justify-between">
-                            <span className="text-xs uppercase tracking-wider text-foreground/70">
+                            <span className="text-xs uppercase tracking-wider text-foreground-muted">
                                 Kristall
                             </span>
                             <span className={`text-xs ${isEnergyPositive ? "text-positive" : "text-danger"}`}>
@@ -131,7 +131,7 @@ export function ResourceBar({ resources: initialResources, planetId }: ResourceB
                                 }}
                             />
                         </div>
-                        <div className="text-xs text-foreground/70 text-right">
+                        <div className="text-xs text-foreground-muted text-right">
                             / {formatNumber(resources.crystal_capacity)}
                         </div>
                     </div>
@@ -139,7 +139,7 @@ export function ResourceBar({ resources: initialResources, planetId }: ResourceB
                     {/* Deuterium */}
                     <div className="space-y-1">
                         <div className="flex items-center justify-between">
-                            <span className="text-xs uppercase tracking-wider text-foreground/70">
+                            <span className="text-xs uppercase tracking-wider text-foreground-muted">
                                 Deuterium
                             </span>
                             <span className={`text-xs ${isEnergyPositive ? "text-positive" : "text-danger"}`}>
@@ -165,7 +165,7 @@ export function ResourceBar({ resources: initialResources, planetId }: ResourceB
                                 }}
                             />
                         </div>
-                        <div className="text-xs text-foreground/70 text-right">
+                        <div className="text-xs text-foreground-muted text-right">
                             / {formatNumber(resources.deuterium_capacity)}
                         </div>
                     </div>
@@ -173,7 +173,7 @@ export function ResourceBar({ resources: initialResources, planetId }: ResourceB
                     {/* Energy */}
                     <div className="space-y-1">
                         <div className="flex items-center justify-between">
-                            <span className="text-xs uppercase tracking-wider text-foreground/70">
+                            <span className="text-xs uppercase tracking-wider text-foreground-muted">
                                 Energie
                             </span>
                             <span className={`text-xs font-medium ${isEnergyPositive ? "text-positive" : "text-danger"}`}>
@@ -200,7 +200,7 @@ export function ResourceBar({ resources: initialResources, planetId }: ResourceB
                                 }}
                             />
                         </div>
-                        <div className="text-xs text-foreground/70 text-right">
+                        <div className="text-xs text-foreground-muted text-right">
                             Verbrauch: {formatNumber(resources.energy_consumption)}
                         </div>
                     </div>

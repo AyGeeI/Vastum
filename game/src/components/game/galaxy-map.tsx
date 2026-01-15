@@ -130,7 +130,7 @@ export function GalaxyMap({ onSelectSector }: GalaxyMapProps) {
                         <Map className="w-7 h-7" />
                         Galaxie Andromeda
                     </h2>
-                    <p className="text-foreground/60 mt-1">
+                    <p className="text-foreground-muted mt-1">
                         Wähle einen Sektor um die Systeme zu erkunden
                     </p>
                 </div>
@@ -143,7 +143,7 @@ export function GalaxyMap({ onSelectSector }: GalaxyMapProps) {
                     >
                         <ZoomOut className="w-4 h-4" />
                     </Button>
-                    <span className="text-sm text-foreground/60 w-16 text-center">
+                    <span className="text-sm text-foreground-muted w-16 text-center">
                         {Math.round(zoomLevel * 100)}%
                     </span>
                     <Button
@@ -161,15 +161,15 @@ export function GalaxyMap({ onSelectSector }: GalaxyMapProps) {
             <div className="flex flex-wrap gap-4 text-sm">
                 <div className="flex items-center gap-2">
                     <div className="w-4 h-4 rounded-full bg-primary/50 shadow-[0_0_10px_rgba(102,252,241,0.5)]" />
-                    <span className="text-foreground/70">Eigene Planeten</span>
+                    <span className="text-foreground-muted">Eigene Planeten</span>
                 </div>
                 <div className="flex items-center gap-2">
                     <div className="w-4 h-4 rounded-full bg-danger/50 shadow-[0_0_10px_rgba(255,107,107,0.4)]" />
-                    <span className="text-foreground/70">Andere Spieler</span>
+                    <span className="text-foreground-muted">Andere Spieler</span>
                 </div>
                 <div className="flex items-center gap-2">
                     <div className="w-4 h-4 rounded-full bg-foreground/20" />
-                    <span className="text-foreground/70">Wenig Aktivität</span>
+                    <span className="text-foreground-muted">Wenig Aktivität</span>
                 </div>
             </div>
 
@@ -243,13 +243,13 @@ export function GalaxyMap({ onSelectSector }: GalaxyMapProps) {
                                     onMouseLeave={() => setHoveredSector(null)}
                                 >
                                     <div className="text-center">
-                                        <div className="text-xs font-mono text-foreground/50">
+                                        <div className="text-xs font-mono text-foreground-muted">
                                             S{sector.sector.toString().padStart(2, "0")}
                                         </div>
                                         {sector.totalPlanets > 0 && (
                                             <div className="flex items-center justify-center gap-1 mt-1">
-                                                <Globe className="w-3 h-3 text-foreground/40" />
-                                                <span className="text-sm font-medium text-foreground/80">
+                                                <Globe className="w-3 h-3 text-foreground-muted" />
+                                                <span className="text-sm font-medium text-foreground-muted">
                                                     {sector.totalPlanets}
                                                 </span>
                                             </div>
@@ -302,7 +302,7 @@ export function GalaxyMap({ onSelectSector }: GalaxyMapProps) {
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                         <div className="text-center opacity-10">
                             <div className="text-6xl font-display text-primary">ANDROMEDA</div>
-                            <div className="text-sm tracking-[0.5em] text-foreground/50">GALAXIE</div>
+                            <div className="text-sm tracking-[0.5em] text-foreground-muted">GALAXIE</div>
                         </div>
                     </div>
                 </div>
@@ -320,8 +320,8 @@ export function GalaxyMap({ onSelectSector }: GalaxyMapProps) {
                                 const ratio = sector.colonizedPlanets / Math.max(1, sector.totalPlanets);
                                 if (ratio > 0.7) return { text: "Hohe Aktivität", color: "text-danger" };
                                 if (ratio > 0.3) return { text: "Mittlere Aktivität", color: "text-accent" };
-                                if (ratio > 0) return { text: "Geringe Aktivität", color: "text-foreground/60" };
-                                return { text: "Unbewohnt", color: "text-foreground/40" };
+                                if (ratio > 0) return { text: "Geringe Aktivität", color: "text-foreground-muted" };
+                                return { text: "Unbewohnt", color: "text-foreground-muted" };
                             };
 
                             const activity = getActivityLevel();
@@ -341,19 +341,19 @@ export function GalaxyMap({ onSelectSector }: GalaxyMapProps) {
                                             <div className="text-2xl font-display text-foreground">
                                                 {sector.totalPlanets}
                                             </div>
-                                            <div className="text-xs text-foreground/50">Planeten</div>
+                                            <div className="text-xs text-foreground-muted">Planeten</div>
                                         </div>
                                         <div className="text-center">
                                             <div className="text-2xl font-display text-danger">
                                                 {sector.colonizedPlanets}
                                             </div>
-                                            <div className="text-xs text-foreground/50">Kolonisiert</div>
+                                            <div className="text-xs text-foreground-muted">Kolonisiert</div>
                                         </div>
                                         <div className="text-center">
                                             <div className="text-2xl font-display text-primary">
                                                 {sector.myPlanets}
                                             </div>
-                                            <div className="text-xs text-foreground/50">Eigene</div>
+                                            <div className="text-xs text-foreground-muted">Eigene</div>
                                         </div>
                                     </div>
                                     <Button

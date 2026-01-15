@@ -225,7 +225,7 @@ export function ProceduralGalaxy({ onSelectSector }: ProceduralGalaxyProps) {
             <div className="flex items-center justify-between">
                 <div>
                     <h2 className="text-2xl font-display text-gradient">Galaxie Andromeda</h2>
-                    <p className="text-foreground/60 text-sm mt-1">
+                    <p className="text-foreground-muted text-sm mt-1">
                         {sectorsRef.current.length} Sektoren - Klicke und ziehe zum Navigieren
                     </p>
                 </div>
@@ -246,15 +246,15 @@ export function ProceduralGalaxy({ onSelectSector }: ProceduralGalaxyProps) {
             <div className="flex flex-wrap gap-4 text-sm">
                 <div className="flex items-center gap-2">
                     <div className="w-3 h-3 rounded-full bg-primary shadow-[0_0_8px_rgba(102,252,241,0.6)]" />
-                    <span className="text-foreground/70">Eigene Planeten</span>
+                    <span className="text-foreground-muted">Eigene Planeten</span>
                 </div>
                 <div className="flex items-center gap-2">
                     <div className="w-3 h-3 rounded-full bg-danger shadow-[0_0_8px_rgba(255,107,107,0.5)]" />
-                    <span className="text-foreground/70">Andere Spieler</span>
+                    <span className="text-foreground-muted">Andere Spieler</span>
                 </div>
                 <div className="flex items-center gap-2">
                     <div className="w-3 h-3 rounded-full bg-foreground/50" />
-                    <span className="text-foreground/70">Unbesiedelt</span>
+                    <span className="text-foreground-muted">Unbesiedelt</span>
                 </div>
             </div>
 
@@ -281,7 +281,7 @@ export function ProceduralGalaxy({ onSelectSector }: ProceduralGalaxyProps) {
                     />
 
                     {/* Instructions Overlay */}
-                    <div className="absolute bottom-4 left-4 text-xs text-foreground/40 pointer-events-none">
+                    <div className="absolute bottom-4 left-4 text-xs text-foreground-muted pointer-events-none">
                         Mausrad: Zoomen | Klicken + Ziehen: Navigieren
                     </div>
                 </div>
@@ -296,7 +296,7 @@ export function ProceduralGalaxy({ onSelectSector }: ProceduralGalaxyProps) {
                                 <h3 className="font-display text-primary text-lg">
                                     Sektor {selectedSector.id}
                                 </h3>
-                                <p className="text-sm text-foreground/60 capitalize">
+                                <p className="text-sm text-foreground-muted capitalize">
                                     {selectedSector.type === "core" ? "Galaxiekern" :
                                         selectedSector.type === "arm" ? "Spiralarm" : "Äußerer Rand"}
                                 </p>
@@ -314,19 +314,19 @@ export function ProceduralGalaxy({ onSelectSector }: ProceduralGalaxyProps) {
                                 <div className="text-2xl font-display text-foreground">
                                     {selectedSector.totalPlanets}
                                 </div>
-                                <div className="text-xs text-foreground/50">Planeten</div>
+                                <div className="text-xs text-foreground-muted">Planeten</div>
                             </div>
                             <div className="text-center">
                                 <div className="text-2xl font-display text-danger">
                                     {selectedSector.colonizedPlanets}
                                 </div>
-                                <div className="text-xs text-foreground/50">Kolonisiert</div>
+                                <div className="text-xs text-foreground-muted">Kolonisiert</div>
                             </div>
                             <div className="text-center">
                                 <div className="text-2xl font-display text-primary">
                                     {selectedSector.myPlanets}
                                 </div>
-                                <div className="text-xs text-foreground/50">Eigene</div>
+                                <div className="text-xs text-foreground-muted">Eigene</div>
                             </div>
                         </div>
                         <Button className="w-full mt-4" variant="primary">

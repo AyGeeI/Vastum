@@ -323,27 +323,27 @@ export function BuildingList({ buildings, planetId, resources: initialResources 
             return (
                 <Card key={building.id} variant="bordered" className="relative overflow-hidden bg-background/30">
                     <div className="absolute top-3 right-3">
-                        <Lock className="w-5 h-5 text-foreground/40" />
+                        <Lock className="w-5 h-5 text-foreground-muted" />
                     </div>
                     <CardContent className="pt-4">
                         <div className="flex items-start justify-between mb-3">
                             <div>
-                                <h4 className="font-medium flex items-center gap-2 text-foreground/60">
+                                <h4 className="font-medium flex items-center gap-2 text-foreground-muted">
                                     <Building className="w-4 h-4" />
                                     {def.name}
                                 </h4>
                             </div>
                         </div>
-                        <p className="text-sm text-foreground/50 mb-4">{def.description}</p>
+                        <p className="text-sm text-foreground-muted mb-4">{def.description}</p>
 
                         <div className="bg-background border border-primary/30 rounded-lg p-3">
                             <p className="text-sm text-primary font-medium mb-2">Voraussetzungen fehlen:</p>
-                            <ul className="text-sm text-foreground/70 space-y-1">
+                            <ul className="text-sm text-foreground-muted space-y-1">
                                 {building.missingRequirements?.map((req, i) => (
                                     <li key={i} className="flex items-center gap-2">
                                         <Minus className="w-3 h-3 text-primary" />
                                         {req.building} Level {req.level}
-                                        <span className="text-foreground/50">(aktuell: {req.currentLevel})</span>
+                                        <span className="text-foreground-muted">(aktuell: {req.currentLevel})</span>
                                     </li>
                                 ))}
                             </ul>
@@ -360,7 +360,7 @@ export function BuildingList({ buildings, planetId, resources: initialResources 
                     <div className="absolute inset-0 bg-background/98 flex flex-col items-center justify-center z-10 p-4">
                         <div className="w-16 h-16 rounded-full border-4 border-primary border-t-transparent animate-spin mb-4" />
                         <h4 className="text-lg font-display text-primary mb-1">{def.name}</h4>
-                        <p className="text-sm text-foreground/70 mb-2">wird auf Level {building.level + 1} ausgebaut</p>
+                        <p className="text-sm text-foreground-muted mb-2">wird auf Level {building.level + 1} ausgebaut</p>
                         {countdown !== undefined && countdown > 0 && (
                             <p className="text-2xl font-mono text-primary mb-4">
                                 {formatCountdown(countdown)}
@@ -387,7 +387,7 @@ export function BuildingList({ buildings, planetId, resources: initialResources 
                                 <Building className="w-4 h-4 text-primary" aria-hidden="true" />
                                 {def.name}
                             </h4>
-                            <p className="text-xs text-foreground/70 mt-1">
+                            <p className="text-xs text-foreground-muted mt-1">
                                 Level {building.level} {building.level < def.maxLevel && `/ ${def.maxLevel}`}
                             </p>
                         </div>
@@ -396,7 +396,7 @@ export function BuildingList({ buildings, planetId, resources: initialResources 
                         )}
                     </div>
 
-                    <p className="text-sm text-foreground/70 mb-3">{def.description}</p>
+                    <p className="text-sm text-foreground-muted mb-3">{def.description}</p>
 
                     {building.level < def.maxLevel && (
                         <>
@@ -423,24 +423,24 @@ export function BuildingList({ buildings, planetId, resources: initialResources 
 
                             {/* Upgrade Cost */}
                             <div className="bg-background/50 border border-border rounded-lg p-3 mb-3 space-y-2">
-                                <div className="text-xs uppercase tracking-wider text-foreground/70 mb-2">
+                                <div className="text-xs uppercase tracking-wider text-foreground-muted mb-2">
                                     Kosten für Level {nextLevel}
                                 </div>
                                 <div className="grid grid-cols-3 gap-2 text-sm">
                                     <div className={cost.metal > resources.metal ? "text-danger" : "text-foreground"}>
-                                        <span className="block text-foreground/70 text-xs">Metall</span>
+                                        <span className="block text-foreground-muted text-xs">Metall</span>
                                         {formatNumber(cost.metal)}
                                     </div>
                                     <div className={cost.crystal > resources.crystal ? "text-danger" : "text-foreground"}>
-                                        <span className="block text-foreground/70 text-xs">Kristall</span>
+                                        <span className="block text-foreground-muted text-xs">Kristall</span>
                                         {formatNumber(cost.crystal)}
                                     </div>
                                     <div className={cost.deuterium > resources.deuterium ? "text-danger" : "text-foreground"}>
-                                        <span className="block text-foreground/70 text-xs">Deuterium</span>
+                                        <span className="block text-foreground-muted text-xs">Deuterium</span>
                                         {formatNumber(cost.deuterium)}
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-1 text-sm text-foreground/70 pt-2 border-t border-border">
+                                <div className="flex items-center gap-1 text-sm text-foreground-muted pt-2 border-t border-border">
                                     <Clock className="w-3 h-3" aria-hidden="true" />
                                     <span>Bauzeit: {formatDuration(buildTime)}</span>
                                 </div>
